@@ -12,7 +12,7 @@ const router = require("./routes/user.routes");
 connectDB();
 app.use(cors());
 
-app.use("/", router)
+app.use("/user", router);
 
 app.listen(PORT, () => {
             console.log(`Server is running at ${PORT}`)
