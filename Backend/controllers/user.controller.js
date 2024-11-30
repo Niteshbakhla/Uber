@@ -33,3 +33,32 @@ exports.registerUser = async (req, res, next) => {
                         return res.status(500).json({ success: false, message: error.message })
             }
 }
+
+
+exports.loginUser = async (req, res, next) => {
+            try {
+                        const error = validationResult(req)
+                        if (!error.isEmpty()) {
+                                    return res.status(400).json({ errors: error.array() });
+                        }
+
+                        const { email, password } = req.body;
+
+                        const user = await userModel.findOne({ email }).select("+password");
+                        if (!user) {
+                                    return res.status(401).json({ success: false, message: "Invalid email or password" })
+                        }
+
+                        const isMatch = await user.comparePassword(password)
+                        if (!isMatch) {
+                                    return res.status(401).json({ success: false, message: "Invalid email or password" })
+                        }
+
+                        const token = user.generateAuthToken();
+
+                        return res.status(201).json({ success: true, token, message: "Successfully Login" })
+            } catch (error) {
+                        return res.status(500).json({ success: true, message: "Internal server error" })
+            }
+
+}
