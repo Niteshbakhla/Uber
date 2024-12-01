@@ -62,3 +62,12 @@ exports.loginUser = async (req, res, next) => {
             }
 
 }
+
+
+exports.getUserProfile = async (req, res) => {
+            try {
+                        return res.status(201).json({ success: true, message: "you got the user" })
+            } catch (error) {
+
+            }
+}
