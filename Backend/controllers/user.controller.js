@@ -36,7 +36,6 @@ exports.registerUser = async (req, res, next) => {
             }
 }
 
-
 exports.loginUser = async (req, res, next) => {
             try {
                         const error = validationResult(req)
@@ -65,10 +64,8 @@ exports.loginUser = async (req, res, next) => {
 
 }
 
-
 exports.getUserProfile = async (req, res) => {
             try {
-
 
                         return res.status(201).json({ success: true, message: "you got the user", user: req.user })
             } catch (error) {
