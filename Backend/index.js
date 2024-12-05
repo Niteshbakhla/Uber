@@ -7,7 +7,8 @@ const app = require("./server")
 const PORT = process.env.PORT || 5000
 const cors = require("cors");
 const { connectDB } = require("./database/db");
-const router = require("./routes/user.routes");
+const userroutes = require("./routes/user.routes");
+const captainRoutes = require("./routes/captain.routes")
 const cookieparser = require("cookie-parser")
 
 
@@ -15,7 +16,9 @@ const cookieparser = require("cookie-parser")
 connectDB();
 app.use(cors());
 app.use(cookieparser())
-app.use("/user", router);
+app.use("/user", userroutes);
+app.use("/captain", captainRoutes)
+
 
 
 
