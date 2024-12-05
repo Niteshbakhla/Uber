@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
 const userModel = require("../Models/user.model");
-const { createUser } = require("../services/service");
+const { createUser } = require("../services/user.service");
 const blacklistModel = require("../Models/blacklist.model");
 
 
@@ -14,6 +14,11 @@ exports.registerUser = async (req, res, next) => {
                         }
 
                         const { fullName: { firstname, lastname }, email, password } = req.body;
+
+                        const isUserAlready = await userModel.findOne({ email });
+                        if (isUserAlready) {
+                                    return res.status(400).json({ message: "User already exist" });
+                        }
 
                         const hashedPassword = await userModel.hashPassword(password);
 
@@ -75,14 +80,33 @@ exports.getUserProfile = async (req, res) => {
 
 exports.logout = async (req, res) => {
             try {
+                        // Clear the token cookie
                         res.clearCookie("token");
 
-                        const token = req.cookies.token || req.headers.authorization.split(" ")[1];
+                        // Get the token from cookies or authorization header
+                        const token = req.cookies?.token || req.headers.authorization?.split(" ")[1];
 
-                        await blacklistModel.create({ token })
+                        // Check if token is valid
+                        if (!token) {
+                                    return res.status(400).json({ success: false, message: "Token is required" });
+                        }
 
-                        return res.status(200).json({ message: "Logged out" })
+                        // Log the token to ensure it's being retrieved properly
+                        console.log("Token retrieved: ", token);
+
+                        // Before inserting, check if the token already exists in the blacklist (optional)
+                        const existingToken = await blacklistModel.findOne({ token });
+
+                        if (existingToken) {
+                                    return res.status(400).json({ success: false, message: "Token is already blacklisted" });
+                        }
+
+                        // Insert the token into the blacklist model
+                        await blacklistModel.create({ token });
+                        // Send response
+                        return res.status(200).json({ message: "Logged out successfully" });
             } catch (error) {
-                        return res.status(500).json({ success: false, message: error.message })
+                        console.error("Error during logout:", error);
+                        return res.status(500).json({ success: false, message: error.message });
             }
-}
+};
