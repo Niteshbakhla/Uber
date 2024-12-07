@@ -1,4 +1,6 @@
+import axios from "axios";
 import React, { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
 const UserLogin = () => {
@@ -8,13 +10,25 @@ const UserLogin = () => {
             const [password, setPassword] = useState("");
 
 
-            const handleSubmit = (e) => {
+            const handleSubmit = async (e) => {
                         e.preventDefault();
-                        const data = {
-                                    email,
-                                    password
+
+                        try {
+                                    const data = {
+                                                email,
+                                                password
+                                    }
+                                    const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/login`, data)
+                                    if (res.status === 201) {
+                                                toast.success(res.data.message)
+                                                setTimeout(() => {
+                                                            navigate("/")
+                                                }, 1000)
+                                    }
+                        } catch (error) {
+                                    toast.error(error.response.data.message)
+                                    return console.log(error)
                         }
-                        console.log(data)
             };
 
             const handleSignInClick = () => {
@@ -23,6 +37,7 @@ const UserLogin = () => {
 
             return (
                         <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 sm:px-6 lg:px-8">
+                                    <Toaster position="top-center" />
                                     <div className="bg-white shadow-lg rounded-lg p-6 sm:p-8 md:p-10 w-full max-w-sm sm:max-w-md">
                                                 {/* Logo */}
                                                 <div className="flex justify-center mb-8">

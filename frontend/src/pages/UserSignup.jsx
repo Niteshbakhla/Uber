@@ -43,7 +43,7 @@ const UserSignup = () => {
 
                         } catch (error) {
                                     toast.error(error.response.data.message)
-                                    return console.log(error)
+                                    return console.log(error.message)
                         }
             };
 
@@ -52,6 +52,7 @@ const UserSignup = () => {
             return (
                         <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 sm:px-6 lg:px-8">
                                     <Toaster position="top-center" />
+
                                     <div className="bg-white shadow-lg rounded-lg p-6 sm:p-8 md:p-10 w-full max-w-sm sm:max-w-md">
                                                 {/* Logo */}
                                                 <div className="flex justify-center mb-8">
