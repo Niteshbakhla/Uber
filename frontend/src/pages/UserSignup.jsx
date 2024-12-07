@@ -1,28 +1,57 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios"
+import toast, { Toaster } from "react-hot-toast"
+import Usercontext, { UserDataContext } from "../context/Usercontext";
 
 const UserSignup = () => {
+            const navigate = useNavigate();
             const [name, setName] = useState("");
             const [email, setEmail] = useState("");
             const [password, setPassword] = useState("");
-            const [confirmPassword, setConfirmPassword] = useState("");
+            const [lastname, setLastname] = useState("");
 
-            const handleSubmit = (e) => {
+
+            const { user, setUser } = React.useContext(UserDataContext)
+            const handleSubmit = async (e) => {
                         e.preventDefault();
 
-                        // Password confirmation check
-                        if (password !== confirmPassword) {
-                                    alert("Passwords do not match!");
-                                    return;
-                        }
+                        try {
+                                    const userData = {
+                                                fullName: {
+                                                            firstname: name,
+                                                            lastname: lastname
+                                                },
 
-                        console.log("Name:", name);
-                        console.log("Email:", email);
-                        console.log("Password:", password);
+                                                email: email,
+                                                password: password
+                                    }
+                                    setUser(userData)
+
+                                    setName("")
+                                    setLastname("")
+                                    setEmail("")
+                                    setPassword("")
+
+                                    const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/register`, userData)
+                                    if (res.status === 201) {
+                                                toast.success(res.data.message)
+                                                setTimeout(() => {
+                                                            navigate("/home")
+                                                }, 1000)
+                                    }
+
+                        } catch (error) {
+                                    toast.error(error.response.data.message)
+                                    return console.log(error)
+                        }
             };
+
+
 
             return (
                         <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 sm:px-6 lg:px-8">
+                                    <Toaster position="top-center" />
                                     <div className="bg-white shadow-lg rounded-lg p-6 sm:p-8 md:p-10 w-full max-w-sm sm:max-w-md">
                                                 {/* Logo */}
                                                 <div className="flex justify-center mb-8">
@@ -53,6 +82,24 @@ const UserSignup = () => {
                                                                                     onChange={(e) => setName(e.target.value)}
                                                                                     required
                                                                                     placeholder="Enter your full name"
+                                                                                    className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                                                        />
+                                                            </div>
+
+                                                            <div>
+                                                                        <label
+                                                                                    htmlFor="lastname"
+                                                                                    className="block text-sm font-medium text-gray-700"
+                                                                        >
+                                                                                    Lastname
+                                                                        </label>
+                                                                        <input
+                                                                                    type="text"
+                                                                                    id="lastname"
+                                                                                    value={lastname}
+                                                                                    onChange={(e) => setLastname(e.target.value)}
+                                                                                    required
+                                                                                    placeholder="Enter your last name"
                                                                                     className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                                                         />
                                                             </div>
@@ -93,23 +140,7 @@ const UserSignup = () => {
                                                                         />
                                                             </div>
                                                             {/* Confirm Password Field */}
-                                                            <div>
-                                                                        <label
-                                                                                    htmlFor="confirmPassword"
-                                                                                    className="block text-sm font-medium text-gray-700"
-                                                                        >
-                                                                                    Confirm Password
-                                                                        </label>
-                                                                        <input
-                                                                                    type="password"
-                                                                                    id="confirmPassword"
-                                                                                    value={confirmPassword}
-                                                                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                                                                    required
-                                                                                    placeholder="Confirm your password"
-                                                                                    className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                                                        />
-                                                            </div>
+
                                                             {/* Signup Button */}
                                                             <div>
                                                                         <button
