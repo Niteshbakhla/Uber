@@ -32,7 +32,7 @@ exports.registerUser = async (req, res, next) => {
 
                         const token = user.generateAuthToken()
 
-                        res.status(201).json({ token, user })
+                        return res.status(201).json({ token, user, message: "user register successfully✅" })
             } catch (error) {
                         if (error.code === 11000) {
                                     return res.status(404).json({ success: false, message: "email already exist" })
