@@ -1,1 +1,54 @@
 Learnings
+
+
+### Notes:
+
+---
+
+### **Problem 1: "Objects are not valid as a React child"**
+
+**Cause**:  
+- `children` is returned directly in JSX without being wrapped in a valid React element (e.g., `Fragment` or `div`).
+- React expects the return value to be a valid React element, not an object.
+
+**Solution**:  
+- Always wrap `children` inside a valid React element (e.g., `Fragment` or `div`).
+- This ensures React can properly render the content.
+
+---
+
+### **Problem 2: "You should call navigate() in a React.useEffect(), not when your component is first rendered"**
+
+**Cause**:  
+- `navigate()` is called directly inside the component body, which runs during the render phase.
+- React disallows side effects (like navigation) during the render phase.
+
+**Solution**:  
+- Move side effects (like `navigate()`) inside `useEffect` to run after the initial render.
+- This ensures navigation happens post-render and avoids unnecessary re-renders.
+
+---
+
+### **Key Concepts**:
+
+1. **JSX Return**:  
+   - React requires that `children` (or other values) must be wrapped in valid React elements like `Fragment` or `div` before returning.
+
+2. **Side Effects**:  
+   - Side effects (e.g., navigation, data fetching) should not occur during the render phase.
+   - Use `useEffect` to handle side effects after the render phase.
+
+3. **React Lifecycle**:  
+   - React first renders the UI and then handles side effects in hooks like `useEffect`.
+   - This approach ensures a clean, predictable render process.
+
+4. **`useEffect` Usage**:  
+   - It’s the correct place to call functions like `navigate()` that cause side effects, ensuring they occur only after the render phase.
+
+---
+
+### **Quick Takeaways**:
+
+- **Wrap `children`** in a valid React element like `Fragment` or `div`.
+- **Use `useEffect`** for side effects like `navigate()`, ensuring they are not called during the render.
+- **Side effects** should be performed after the initial render to avoid re-renders or unexpected behavior.
