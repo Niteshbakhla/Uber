@@ -34,7 +34,7 @@ exports.registerCaptain = async (req, res) => {
 
                         const token = captain.generateAuthToken();
 
-                        return res.status(201).json({ token, captain });
+                        return res.status(201).json({ token, captain, message: "captian account created" });
             } catch (error) {
                         return res.status(500).json({ success: false, message: error.message })
             }
