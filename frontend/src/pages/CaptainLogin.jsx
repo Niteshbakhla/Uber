@@ -1,19 +1,40 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { CaptainDataContext } from "../context/CaptainContext";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const CaptainLoginPage = () => {
             const navigate = useNavigate();
             const [email, setEmail] = useState("");
             const [password, setPassword] = useState("");
 
-            const handleSubmit = (e) => {
+            const { captain, setCaptain } = React.useContext(CaptainDataContext)
+
+
+
+
+
+            const handleSubmit = async (e) => {
                         e.preventDefault();
-                        console.log("Email:", email);
-                        console.log("Password:", password);
+                        const captain = {
+                                    email,
+                                    password
+                        }
+
+                        const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/captain/login`, captain);
+                        if (res.status === 200) {
+                                    toast.success(res.data.message)
+                                    setTimeout(() => {
+                                                navigate("/captain-home")
+                                    }, 1000);
+                        }
+
             };
 
             return (
                         <div className="min-h-screen flex items-center justify-center bg-blue-100 px-4 sm:px-6 lg:px-8">
+                                    <Toaster position="top-center" />
                                     <div className="bg-white shadow-lg rounded-lg p-6 sm:p-8 md:p-10 w-full max-w-sm sm:max-w-md">
                                                 {/* Logo */}
                                                 <div className="flex justify-center mb-8">

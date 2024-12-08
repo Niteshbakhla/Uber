@@ -1,29 +1,66 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { CaptainDataContext } from "../context/CaptainContext";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const CaptainSignup = () => {
-            const [name, setName] = useState("");
+            const [firstname, setFirstname] = useState("");
+            const [lastname, setLastname] = useState("");
             const [email, setEmail] = useState("");
             const [password, setPassword] = useState("");
             const [confirmPassword, setConfirmPassword] = useState("");
+            const [vehicleColor, setVehicleColor] = useState("");
+            const [vehiclePlate, setVehiclePlate] = useState("");
+            const [vehicleCapacity, setVehicleCapacity] = useState("");
+            const [vehicleType, setVehicleType] = useState("car"); // default "car"
+            const [locationLtd, setLocationLtd] = useState("");
+            const [locationLng, setLocationLng] = useState("");
+            const [status, setStatus] = useState("inactive"); // default "inactive"
+            const navigate = useNavigate();
 
-            const handleSubmit = (e) => {
+            const { captain, setCaptain } = React.useContext(CaptainDataContext);
+
+            console.log(captain);
+
+            const handleSubmit = async (e) => {
                         e.preventDefault();
 
-                        // Basic validation
-                        if (password !== confirmPassword) {
-                                    alert("Passwords do not match!");
-                                    return;
+                        const captainData = {
+                                    fullname: {
+                                                firstname,
+                                                lastname
+                                    },
+
+                                    email,
+                                    password,
+                                    status,
+                                    vehicle: {
+                                                color: vehicleColor,
+                                                plate: vehiclePlate,
+                                                capacity: vehicleCapacity,
+                                                vehicleType: vehicleType
+                                    }
                         }
 
-                        console.log("Name:", name);
-                        console.log("Email:", email);
-                        console.log("Password:", password);
+                        const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/captain/register`, captainData)
+                        console.log(res)
+
+                        if (res.status === 201) {
+                                    toast.success(res.data.message)
+                                    setTimeout(() => {
+                                                navigate("/captain-home")
+                                    }, 1000)
+                        }
+
+                        console.log(res)
+                        // Here, you would typically send this data to your backend for signup
             };
 
             return (
                         <div className="min-h-screen flex items-center justify-center bg-blue-100 px-4 sm:px-6 lg:px-8">
-                                    <div className="bg-white shadow-lg rounded-lg p-6 sm:p-8 md:p-10 w-full max-w-sm sm:max-w-md">
+                                    <Toaster position="top-center" />
+                                    <div className="bg-white shadow-lg rounded-lg p-6 sm:p-8 md:p-10 w-full max-w-lg">
                                                 {/* Logo */}
                                                 <div className="flex justify-center mb-8">
                                                             <img
@@ -37,31 +74,39 @@ const CaptainSignup = () => {
                                                             Captain Signup
                                                 </h2>
                                                 {/* Form */}
-                                                <form onSubmit={handleSubmit} className="space-y-6">
-                                                            {/* Name Field */}
-                                                            <div>
-                                                                        <label
-                                                                                    htmlFor="name"
-                                                                                    className="block text-sm font-medium text-gray-700"
-                                                                        >
-                                                                                    Full Name
-                                                                        </label>
-                                                                        <input
-                                                                                    type="text"
-                                                                                    id="name"
-                                                                                    value={name}
-                                                                                    onChange={(e) => setName(e.target.value)}
-                                                                                    required
-                                                                                    placeholder="Enter your full name"
-                                                                                    className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                                                        />
+                                                <form onSubmit={handleSubmit} className="space-y-4">
+                                                            {/* Full Name Fields */}
+                                                            <div className="flex flex-col sm:flex-row sm:space-x-4">
+                                                                        <div className="sm:w-1/2">
+                                                                                    <label htmlFor="firstname" className="block text-sm font-medium text-gray-700">
+                                                                                                First Name
+                                                                                    </label>
+                                                                                    <input
+                                                                                                type="text"
+                                                                                                id="firstname"
+                                                                                                value={firstname}
+                                                                                                onChange={(e) => setFirstname(e.target.value)}
+                                                                                                required
+                                                                                                className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                                                                    />
+                                                                        </div>
+                                                                        <div className="sm:w-1/2">
+                                                                                    <label htmlFor="lastname" className="block text-sm font-medium text-gray-700">
+                                                                                                Last Name
+                                                                                    </label>
+                                                                                    <input
+                                                                                                type="text"
+                                                                                                id="lastname"
+                                                                                                value={lastname}
+                                                                                                onChange={(e) => setLastname(e.target.value)}
+                                                                                                required
+                                                                                                className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                                                                    />
+                                                                        </div>
                                                             </div>
                                                             {/* Email Field */}
                                                             <div>
-                                                                        <label
-                                                                                    htmlFor="email"
-                                                                                    className="block text-sm font-medium text-gray-700"
-                                                                        >
+                                                                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                                                                                     Email Address
                                                                         </label>
                                                                         <input
@@ -70,16 +115,12 @@ const CaptainSignup = () => {
                                                                                     value={email}
                                                                                     onChange={(e) => setEmail(e.target.value)}
                                                                                     required
-                                                                                    placeholder="Enter your email"
                                                                                     className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                                                         />
                                                             </div>
                                                             {/* Password Field */}
                                                             <div>
-                                                                        <label
-                                                                                    htmlFor="password"
-                                                                                    className="block text-sm font-medium text-gray-700"
-                                                                        >
+                                                                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                                                                                     Password
                                                                         </label>
                                                                         <input
@@ -88,27 +129,87 @@ const CaptainSignup = () => {
                                                                                     value={password}
                                                                                     onChange={(e) => setPassword(e.target.value)}
                                                                                     required
-                                                                                    placeholder="Create a password"
                                                                                     className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                                                         />
                                                             </div>
-                                                            {/* Confirm Password Field */}
+
+                                                            {/* Vehicle Info */}
+                                                            <div className="flex flex-col sm:flex-row sm:space-x-4">
+                                                                        <div className="sm:w-1/2">
+                                                                                    <label htmlFor="vehicleColor" className="block text-sm font-medium text-gray-700">
+                                                                                                Vehicle Color
+                                                                                    </label>
+                                                                                    <input
+                                                                                                type="text"
+                                                                                                id="vehicleColor"
+                                                                                                value={vehicleColor}
+                                                                                                onChange={(e) => setVehicleColor(e.target.value)}
+                                                                                                required
+                                                                                                className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                                                                    />
+                                                                        </div>
+                                                                        <div className="sm:w-1/2">
+                                                                                    <label htmlFor="vehiclePlate" className="block text-sm font-medium text-gray-700">
+                                                                                                Vehicle Plate
+                                                                                    </label>
+                                                                                    <input
+                                                                                                type="text"
+                                                                                                id="vehiclePlate"
+                                                                                                value={vehiclePlate}
+                                                                                                onChange={(e) => setVehiclePlate(e.target.value)}
+                                                                                                required
+                                                                                                className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                                                                    />
+                                                                        </div>
+                                                            </div>
+                                                            <div className="flex flex-col sm:flex-row sm:space-x-4">
+                                                                        <div className="sm:w-1/2">
+                                                                                    <label htmlFor="vehicleCapacity" className="block text-sm font-medium text-gray-700">
+                                                                                                Vehicle Capacity
+                                                                                    </label>
+                                                                                    <input
+                                                                                                type="number"
+                                                                                                id="vehicleCapacity"
+                                                                                                value={vehicleCapacity}
+                                                                                                onChange={(e) => setVehicleCapacity(e.target.value)}
+                                                                                                required
+                                                                                                min="1"
+                                                                                                className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                                                                    />
+                                                                        </div>
+                                                                        <div className="sm:w-1/2">
+                                                                                    <label htmlFor="vehicleType" className="block text-sm font-medium text-gray-700">
+                                                                                                Vehicle Type
+                                                                                    </label>
+                                                                                    <select
+                                                                                                id="vehicleType"
+                                                                                                value={vehicleType}
+                                                                                                onChange={(e) => setVehicleType(e.target.value)}
+                                                                                                required
+                                                                                                className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                                                                    >
+                                                                                                <option value="car">Car</option>
+                                                                                                <option value="motorcycle">Motorcycle</option>
+                                                                                                <option value="auto">Auto</option>
+                                                                                    </select>
+                                                                        </div>
+                                                            </div>
+                                                            {/* Location */}
+
+                                                            {/* Status */}
                                                             <div>
-                                                                        <label
-                                                                                    htmlFor="confirmPassword"
-                                                                                    className="block text-sm font-medium text-gray-700"
-                                                                        >
-                                                                                    Confirm Password
+                                                                        <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+                                                                                    Status
                                                                         </label>
-                                                                        <input
-                                                                                    type="password"
-                                                                                    id="confirmPassword"
-                                                                                    value={confirmPassword}
-                                                                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                                                                    required
-                                                                                    placeholder="Confirm your password"
+                                                                        <select
+                                                                                    id="status"
+                                                                                    value={status}
+                                                                                    onChange={(e) => setStatus(e.target.value)}
                                                                                     className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                                                        />
+                                                                        >
+                                                                                    <option value="active">Active</option>
+                                                                                    <option value="inactive">Inactive</option>
+                                                                        </select>
                                                             </div>
                                                             {/* Sign Up Button */}
                                                             <div>
@@ -123,12 +224,12 @@ const CaptainSignup = () => {
                                                 {/* Footer */}
                                                 <p className="mt-4 text-center text-sm text-gray-600">
                                                             Already have an account?{" "}
-                                                            <Link to={"/login"} className="text-blue-600 hover:underline">
+                                                            <Link to={"/captain-login"} className="text-blue-600 hover:underline">
                                                                         Log in
                                                             </Link>
                                                 </p>
                                     </div>
-                        </div >
+                        </div>
             );
 };
 
