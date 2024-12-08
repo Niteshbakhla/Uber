@@ -35,7 +35,8 @@ const UserSignup = () => {
 
                                     const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/register`, userData)
                                     if (res.status === 201) {
-                                                toast.success(res.data.message)
+                                                toast.success(res.data.message);
+                                                localStorage.setItem("token", res.data.token)
                                                 setTimeout(() => {
                                                             navigate("/home")
                                                 }, 1000)

@@ -1,7 +1,8 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import { UserDataContext } from "../context/Usercontext";
 
 const UserLogin = () => {
 
@@ -9,6 +10,7 @@ const UserLogin = () => {
             const [email, setEmail] = useState("");
             const [password, setPassword] = useState("");
 
+            const { user, setUser } = useContext(UserDataContext)
 
             const handleSubmit = async (e) => {
                         e.preventDefault();
@@ -19,8 +21,10 @@ const UserLogin = () => {
                                                 password
                                     }
                                     const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/login`, data)
+                                    setUser(res.data)
                                     if (res.status === 201) {
-                                                toast.success(res.data.message)
+                                                toast.success(res.data.message);
+                                                localStorage.setItem("token", res.data.token)
                                                 setTimeout(() => {
                                                             navigate("/")
                                                 }, 1000)
