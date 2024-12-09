@@ -24,7 +24,9 @@ const CaptainLoginPage = () => {
 
                         const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/captain/login`, captain);
                         if (res.status === 200) {
-                                    toast.success(res.data.message)
+                                    toast.success(res.data.message);
+
+                                    localStorage.setItem("token", res.data.token)
                                     setTimeout(() => {
                                                 navigate("/captain-home")
                                     }, 1000);
