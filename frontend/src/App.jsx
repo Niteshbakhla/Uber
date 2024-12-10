@@ -10,6 +10,7 @@ import UserProtected from './protectedroues/UserProtected'
 import UserLogout from './pages/UserLogout'
 import CaptainHome from './pages/CaptainHome'
 import CaptainProtected from './protectedroues/CaptainProtected'
+import 'remixicon/fonts/remixicon.css'
 
 const App = () => {
 
