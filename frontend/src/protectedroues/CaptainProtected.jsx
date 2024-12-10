@@ -20,21 +20,23 @@ const CaptainProtected = ({ children }) => {
                         }
             }, [token]);
 
-            axios.get(`${import.meta.env.VITE_BASE_URL}/captain/profile`, {
-                        headers: {
-                                    Authorization: `Bearer ${token}`,
-                        },
+            useEffect(() => {
+                        axios.get(`${import.meta.env.VITE_BASE_URL}/captain/profile`, {
+                                    headers: {
+                                                Authorization: `Bearer ${token}`,
+                                    },
 
-            }).then(res => {
-                        if (res.status === 200) {
-                                    setCaptain(res.data.captain)
-                                    setIsLoading(false)
-                        }
-            }).catch(err => {
-                        console.log(err)
-                        localStorage.removeItem("token")
-                        navigate("/captain-login")
-            })
+                        }).then(res => {
+                                    if (res.status === 200) {
+                                                setCaptain(res.data.captain)
+                                                setIsLoading(false)
+                                    }
+                        }).catch(err => {
+                                    console.log(err)
+                                    localStorage.removeItem("token")
+                                    navigate("/captain-login")
+                        })
+            }, [])
 
             if (isLoading) {
                         return <div>Loading.....</div>
