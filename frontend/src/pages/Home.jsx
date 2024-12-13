@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import LocationSearch from './LocationSearch';
 import Vehicle from '../Components/Vehicle';
 import ConfirmRidePanel from '../Components/ConfirmRidePanel';
+import LookingDriver from '../Components/LookingDriver';
+import WaitForDriver from '../Components/WaitForDriver';
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
   const [destination, setDestination] = useState("");
   const [panel, setPanel] = useState(false)
-  const [vehiclePanel, setVehiclePanel] = useState(false)
-  const [confirmRide, setConfirmRide] = useState(false)
+  const [vehiclePanel, setVehiclePanel] = useState(false);
+  const [confirmRide, setConfirmRide] = useState(false);
 
+  const [lookingForDriver, setLookingForDriver] = useState(false)
 
   console.log(vehiclePanel)
   return (
@@ -64,7 +67,15 @@ const Home = () => {
         </div>
 
         <div className={`lg:w-[1000px] w-full absolute bottom-0  bg-white  h-[600px]  lg:h-[300px] transition-all duration-1000 ${confirmRide ? "translate-y-[0%]" : "translate-y-[100%]"}  `}>
-          <ConfirmRidePanel />
+          <ConfirmRidePanel setLookingForDriver={setLookingForDriver} />
+        </div>
+
+        <div className={`lg:w-[1000px] w-full absolute bottom-0  bg-white  h-[600px]  lg:h-[300px] transition-all duration-1000 ${lookingForDriver ? "translate-y-[0%]" : "translate-y-[100%]"}  `}>
+          <LookingDriver />
+        </div>
+
+        <div className={`lg:w-[1000px] w-full absolute bottom-0  bg-white  h-[600px]  lg:h-[300px] transition-all duration-1000   `}>
+          <WaitForDriver />
         </div>
       </div>
     </div >
