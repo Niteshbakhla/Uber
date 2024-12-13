@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import LocationSearch from './LocationSearch';
 import Vehicle from '../Components/Vehicle';
+import ConfirmRidePanel from '../Components/ConfirmRidePanel';
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
   const [destination, setDestination] = useState("");
   const [panel, setPanel] = useState(false)
-
   const [vehiclePanel, setVehiclePanel] = useState(false)
+  const [confirmRide, setConfirmRide] = useState(false)
 
 
+  console.log(vehiclePanel)
   return (
     <div className="relative h-screen  bg-gray-100">
       {/* Full Screen Image */}
@@ -54,14 +56,16 @@ const Home = () => {
         </div>
 
         <div className={`lg:w-[1000px] w-full bg-white  lg:h-[300px] transition-all duration-1000 ${panel ? "h-full" : "h-[0]"}`}>
-          <LocationSearch setPanel={setVehiclePanel} />
+          <LocationSearch setPanel={setVehiclePanel} setPanelOpen={setPanel} />
         </div>
 
-        <div className={`lg:w-[1000px] w-full absolute bottom-0 bg-white  lg:h-[300px] transition-all duration-1000 ${vehiclePanel ? "translate-y-[-70%]" : "translate-y-[100%]"} `}>
-          <Vehicle />
+        <div className={`lg:w-[1000px] w-full absolute bottom-0  bg-white h-full  lg:h-[300px] transition-all duration-1000 ${vehiclePanel ? "translate-y-[50%]" : "translate-y-[100%]"} `}>
+          <Vehicle setVehiclePanel={setVehiclePanel} confirmRide={setConfirmRide} />
         </div>
 
-
+        <div className={`lg:w-[1000px] w-full absolute bottom-0  bg-white  h-[600px]  lg:h-[300px] transition-all duration-1000 ${confirmRide ? "translate-y-[0%]" : "translate-y-[100%]"}  `}>
+          <ConfirmRidePanel />
+        </div>
       </div>
     </div >
   );
