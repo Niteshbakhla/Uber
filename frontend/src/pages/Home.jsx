@@ -7,6 +7,8 @@ const Home = () => {
   const [destination, setDestination] = useState("");
   const [panel, setPanel] = useState(false)
 
+  const [vehiclePanel, setVehiclePanel] = useState(false)
+
 
   return (
     <div className="relative h-screen  bg-gray-100">
@@ -22,7 +24,7 @@ const Home = () => {
         {/* Content */}
         <div className="text-white text-center p-4 space-y-6 w-full sm:w-1/2 md:w-1/3 bg-opacity-80  rounded-lg">
           {/* Logo */}
-          <img onClick={() => setPanel(false)}
+          <img onClick={() => { setPanel(false), setVehiclePanel(false) }}
             src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
             alt="Uber Logo"
             className="mx-auto w-32 sm:w-40"
@@ -52,10 +54,10 @@ const Home = () => {
         </div>
 
         <div className={`lg:w-[1000px] w-full bg-white  lg:h-[300px] transition-all duration-1000 ${panel ? "h-full" : "h-[0]"}`}>
-          <LocationSearch />
+          <LocationSearch setPanel={setVehiclePanel} />
         </div>
 
-        <div className={`lg:w-[1000px] w-full absolute bottom-0 bg-white  lg:h-[300px] `}>
+        <div className={`lg:w-[1000px] w-full absolute bottom-0 bg-white  lg:h-[300px] transition-all duration-1000 ${vehiclePanel ? "translate-y-[-70%]" : "translate-y-[100%]"} `}>
           <Vehicle />
         </div>
 
