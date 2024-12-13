@@ -1,6 +1,6 @@
 import React from "react";
 
-const Vehicle = () => {
+const Vehicle = ({ setVehiclePanel, confirmRide }) => {
             const rides = [
                         {
                                     type: "UberX",
@@ -37,34 +37,40 @@ const Vehicle = () => {
             ];
 
             return (
-                        <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-4  ">
-                                    <h1 className="text-4xl whitespace-nowrap mb-6 font-bold">Choose a Vehicle</h1>
-                                    {rides.map((ride, index) => (
-                                                <div
-                                                            key={index}
-                                                            className={`flex  items-center justify-between border-b active:bg-black/10 ${index === 0 ? "border-red-500" : "border-gray-800"
-                                                                        } pb-4 mb-4 last:border-b-0 last:mb-0`}
-                                                >
-                                                            <div className="flex items-center space-x-4">
-                                                                        <img
-                                                                                    src={ride.img}
-                                                                                    alt={`${ride.type}`}
-                                                                                    className="w-12 h-12 object-cover"
-                                                                        />
+                        <div className="max-w-md mx-auto   bg-white rounded-lg shadow-lg p-4  ">
+                                    <div className="flex justify-between items-center">
+                                                <h1 className="text-4xl whitespace-nowrap mb-6 font-bold">Choose a Vehicle</h1>
+                                                <i onClick={() => { setVehiclePanel(false) }} className="ri-arrow-down-wide-fill text-3xl bg-black rounded-full p-2 text-white"></i>
+                                    </div>
+                                    {
+                                                rides.map((ride, index) => (
+                                                            <div
+                                                                        onClick={() => confirmRide(true)}
+                                                                        key={index}
+                                                                        className={`flex  items-center justify-between border-b active:bg-black/10 ${index === 0 ? "border-red-500" : "border-gray-800"
+                                                                                    } pb-4 mb-4 last:border-b-0 last:mb-0`}
+                                                            >
+                                                                        <div className="flex items-center space-x-4">
+                                                                                    <img
+                                                                                                src={ride.img}
+                                                                                                alt={`${ride.type}`}
+                                                                                                className="w-12 h-12 object-cover"
+                                                                                    />
+                                                                                    <div>
+                                                                                                <h3 className="text-lg font-bold">{ride.type}</h3>
+                                                                                                <p className="text-gray-600 text-sm">
+                                                                                                            {ride.passengers} passengers • {ride.time}
+                                                                                                </p>
+                                                                                                <p className="text-gray-500 text-xs">{ride.description}</p>
+                                                                                    </div>
+                                                                        </div>
                                                                         <div>
-                                                                                    <h3 className="text-lg font-bold">{ride.type}</h3>
-                                                                                    <p className="text-gray-600 text-sm">
-                                                                                                {ride.passengers} passengers • {ride.time}
-                                                                                    </p>
-                                                                                    <p className="text-gray-500 text-xs">{ride.description}</p>
+                                                                                    <p className="text-xl font-semibold">{ride.price}</p>
                                                                         </div>
                                                             </div>
-                                                            <div>
-                                                                        <p className="text-xl font-semibold">{ride.price}</p>
-                                                            </div>
-                                                </div>
-                                    ))}
-                        </div>
+                                                ))
+                                    }
+                        </div >
             );
 };
 
