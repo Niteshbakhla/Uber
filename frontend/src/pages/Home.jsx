@@ -11,8 +11,8 @@ const Home = () => {
   const [panel, setPanel] = useState(false)
   const [vehiclePanel, setVehiclePanel] = useState(false);
   const [confirmRide, setConfirmRide] = useState(false);
-
   const [lookingForDriver, setLookingForDriver] = useState(false)
+  const [WatitingForDriver, setWatitingForDriver] = useState(false)
 
   console.log(vehiclePanel)
   return (
@@ -74,7 +74,7 @@ const Home = () => {
           <LookingDriver />
         </div>
 
-        <div className={`lg:w-[1000px] w-full absolute bottom-0  bg-white  h-[600px]  lg:h-[300px] transition-all duration-1000   `}>
+        <div className={`lg:w-[1000px] w-full absolute bottom-0  bg-white  h-[600px]  lg:h-[300px] transition-all duration-1000 translate-y-[100%]  `}>
           <WaitForDriver />
         </div>
       </div>

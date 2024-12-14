@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ConfirmRidePanel = () => {
+const ConfirmRidePanel = ({ setLookingForDriver }) => {
             return (
                         <div>
                                     <h5 className='p-1 text-center w-[93%] absolute top-0' ><i className="text-3xl text-gray-200 ri-arrow-down-wide-line"></i></h5>
@@ -31,7 +31,7 @@ const ConfirmRidePanel = () => {
                                                                         </div>
                                                             </div>
                                                 </div>
-                                                <button className='w-full py-5 mt-5  bg-green-600 text-white font-semibold p-2 rounded-lg text-3xl'>Confirm</button>
+                                                <button onClick={() => setLookingForDriver(true)} className='w-full py-5 mt-5  bg-green-600 text-white font-semibold p-2 rounded-lg text-3xl'>Confirm</button>
                                     </div>
                         </div>
             )
